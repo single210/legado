@@ -107,7 +107,7 @@ class KeyboardToolPop(
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             adapter.addHeaderView {
                 ItemFilletTextBinding.inflate(context.layoutInflater, it, false).apply {
-                    textView.text = "↩\uFE0F"
+                    textView.text = "←"
                     root.setOnClickListener {
                         callBack.onUndoClicked()
                     }
@@ -115,7 +115,7 @@ class KeyboardToolPop(
             }
             adapter.addHeaderView {
                 ItemFilletTextBinding.inflate(context.layoutInflater, it, false).apply {
-                    textView.text = "↪\uFE0F"
+                    textView.text = "→"
                     root.setOnClickListener {
                         callBack.onRedoClicked()
                     }
