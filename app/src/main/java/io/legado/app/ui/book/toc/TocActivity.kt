@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.MotionEvent
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
@@ -24,6 +25,7 @@ import io.legado.app.model.ReadBook
 import io.legado.app.ui.about.AppLogDialog
 import io.legado.app.ui.book.toc.rule.TxtTocRuleDialog
 import io.legado.app.ui.file.HandleFileContract
+import io.legado.app.ui.replace.ReplaceRuleActivity
 import io.legado.app.ui.widget.dialog.WaitDialog
 import io.legado.app.utils.applyTint
 import io.legado.app.utils.gone
@@ -33,9 +35,6 @@ import io.legado.app.utils.showDialogFragment
 import io.legado.app.utils.viewbindingdelegate.viewBinding
 import io.legado.app.utils.visible
 
-/**
- * 目录
- */
 class TocActivity : VMBaseActivity<ActivityChapterListBinding, TocViewModel>(),
     TxtTocRuleDialog.CallBack {
 
@@ -54,6 +53,12 @@ class TocActivity : VMBaseActivity<ActivityChapterListBinding, TocViewModel>(),
             }
         }
     }
+    private val replaceActivity =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+            if (it.resultCode == RESULT_OK) {
+                viewModel.replaceRuleChanged()
+            }
+        }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         tabLayout = binding.titleBar.findViewById(R.id.tab_layout)
@@ -180,6 +185,16 @@ class TocActivity : VMBaseActivity<ActivityChapterListBinding, TocViewModel>(),
             }
 
             R.id.menu_log -> showDialogFragment<AppLogDialog>()
+
+            R.id.menu_replace_show -> {
+                val intent = Intent(this, ReplaceRuleActivity::class.java)
+                viewModel.bookData.value?.let { book ->
+                    intent.putExtra("bookName", book.name)
+                    intent.putExtra("bookUrl", book.bookUrl)
+                }
+                replaceActivity.launch(intent)
+                return true
+            }
         }
         return super.onCompatOptionsItemSelected(item)
     }
