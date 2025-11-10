@@ -15,25 +15,11 @@ jobs:
     outputs:
       version: ${{ steps.set-ver.outputs.version }}
       versionL: ${{ steps.set-ver.outputs.versionL }}
-      lanzou: ${{ steps.check.outputs.lanzou }}
-      telegram: ${{ steps.check.outputs.telegram }}
-      gitee: ${{ steps.check.outputs.gitee }}
     steps:
       - id: set-ver
         run: |
           echo "version=$(date -d "8 hour" -u +3.%y.%m%d%H)" >> $GITHUB_OUTPUT
           echo "versionL=$(date -d "8 hour" -u +3.%y.%m%d%H%M)" >> $GITHUB_OUTPUT
-      - id: check
-        run: |
-          if [ -n "${{ secrets.LANZOU_ID }}" ]; then
-            echo "lanzou=yes" >> $GITHUB_OUTPUT
-          fi
-          if [ -n "${{ secrets.BOT_TOKEN }}" ]; then
-            echo "telegram=yes" >> $GITHUB_OUTPUT
-          fi
-          if [ -n "${{ secrets.GITEE_TOKEN }}" ]; then
-            echo "gitee=yes" >> $GITHUB_OUTPUT
-          fi
 
   build:
     needs: prepare
