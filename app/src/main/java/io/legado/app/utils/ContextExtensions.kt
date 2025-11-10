@@ -37,7 +37,6 @@ import androidx.core.content.edit
 import androidx.preference.PreferenceManager
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel
 import io.legado.app.R
-import io.legado.app.constant.AppConst
 import io.legado.app.data.entities.Book
 import io.legado.app.help.IntentHelp
 import io.legado.app.help.book.isAudio
@@ -79,7 +78,6 @@ fun Context.startActivityForBook(
     intent.apply(configIntent)
     startActivity(intent)
 }
-
 
 inline fun <reified T : Service> Context.startService(configIntent: Intent.() -> Unit = {}) {
     startService(Intent(this, T::class.java).apply(configIntent))
@@ -198,7 +196,6 @@ fun Context.putPrefStringSet(key: String, value: MutableSet<String>) =
 fun Context.removePref(key: String) =
     defaultSharedPreferences.edit { remove(key) }
 
-
 fun Context.getCompatColor(@ColorRes id: Int): Int = ContextCompat.getColor(this, id)
 
 fun Context.getCompatDrawable(@DrawableRes id: Int): Drawable? = ContextCompat.getDrawable(this, id)
@@ -218,15 +215,11 @@ fun Context.restart() {
                     or Intent.FLAG_ACTIVITY_CLEAR_TOP
         )
         startActivity(intent)
-        //杀掉以前进程
         Process.killProcess(Process.myPid())
         exitProcess(0)
     }
 }
 
-/**
- * 系统息屏时间
- */
 val Context.sysScreenOffTime: Int
     get() {
         return kotlin.runCatching {
@@ -265,7 +258,8 @@ fun Context.share(text: String, title: String = getString(R.string.share)) {
 }
 
 fun Context.share(file: File, type: String = "text/*") {
-    val fileUri = FileProvider.getUriForFile(this, AppConst.authority, file)
+    val dynamicAuthority = this.packageName + ".fileProvider"
+    val fileUri = FileProvider.getUriForFile(this, dynamicAuthority, file)
     val intent = Intent(Intent.ACTION_SEND)
     intent.type = type
     intent.putExtra(Intent.EXTRA_STREAM, fileUri)
@@ -296,7 +290,8 @@ fun Context.shareWithQr(
             fOut.flush()
             fOut.close()
             file.setReadable(true, false)
-            val contentUri = FileProvider.getUriForFile(this, AppConst.authority, file)
+            val dynamicAuthority = this.packageName + ".fileProvider"
+            val contentUri = FileProvider.getUriForFile(this, dynamicAuthority, file)
             val intent = Intent(Intent.ACTION_SEND)
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             intent.putExtra(Intent.EXTRA_STREAM, contentUri)
@@ -334,9 +329,6 @@ fun Context.sendMail(mail: String) {
     }
 }
 
-/**
- * 获取电量
- */
 val Context.sysBattery: Int
     get() {
         val iFilter = IntentFilter(Intent.ACTION_BATTERY_CHANGED)
@@ -374,12 +366,12 @@ fun Context.openFileUri(uri: Uri, type: String? = null) {
     intent.action = Intent.ACTION_VIEW
     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-        //7.0版本以上
         intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
     }
-    val uri = if (uri.isContentScheme()) uri
-    else FileProvider.getUriForFile(this, AppConst.authority, File(uri.path!!))
-    intent.setDataAndType(uri, type ?: IntentType.from(uri))
+    val dynamicAuthority = this.packageName + ".fileProvider"
+    val fileUri = if (uri.isContentScheme()) uri
+    else FileProvider.getUriForFile(this, dynamicAuthority, File(uri.path!!))
+    intent.setDataAndType(fileUri, type ?: IntentType.from(uri))
     try {
         startActivity(intent)
     } catch (e: Exception) {
