@@ -1,6 +1,5 @@
 package io.legado.app.ui.book.toc
 
-
 import android.app.Application
 import android.net.Uri
 import androidx.lifecycle.MutableLiveData
@@ -10,6 +9,7 @@ import io.legado.app.constant.AppLog
 import io.legado.app.data.appDb
 import io.legado.app.data.entities.Book
 import io.legado.app.exception.NoStackTraceException
+import io.legado.app.help.book.ContentProcessor
 import io.legado.app.model.ReadBook
 import io.legado.app.model.localBook.LocalBook
 import io.legado.app.utils.FileDoc
@@ -119,6 +119,22 @@ class TocViewModel(application: Application) : BaseViewModel(application) {
             AppLog.put("导出失败\n${it.localizedMessage}", it, true)
         }.onSuccess {
             context.toastOnUi("导出成功")
+        }
+    }
+
+    fun replaceRuleChanged() {
+        execute {
+            val book = bookData.value ?: return@execute
+            book.origin?.let {
+                ContentProcessor.get(book.name, it).upReplaceRules()
+            }
+            book
+        }.onSuccess {
+            chapterListCallBack?.clearDisplayTitle()
+            chapterListCallBack?.upChapterList(searchKey)
+        }.onError {
+            AppLog.put("替换规则刷新失败:${it.localizedMessage}", it, true)
+            context.toastOnUi("替换规则刷新失败")
         }
     }
 
