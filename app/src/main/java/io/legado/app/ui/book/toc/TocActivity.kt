@@ -29,8 +29,6 @@ import io.legado.app.ui.replace.ReplaceRuleActivity
 import io.legado.app.ui.widget.dialog.WaitDialog
 import io.legado.app.utils.applyTint
 import io.legado.app.utils.gone
-import io.legado.app.utils.hideSoftInput
-import io.legado.app.utils.shouldHideSoftInput
 import io.legado.app.utils.showDialogFragment
 import io.legado.app.utils.viewbindingdelegate.viewBinding
 import io.legado.app.utils.visible
@@ -73,17 +71,6 @@ class TocActivity : VMBaseActivity<ActivityChapterListBinding, TocViewModel>(),
         intent.getStringExtra("bookUrl")?.let {
             viewModel.initBook(it)
         }
-    }
-
-    override fun dispatchTouchEvent(ev: MotionEvent): Boolean {
-        if (ev.action == MotionEvent.ACTION_DOWN) {
-            currentFocus?.let {
-                if (it.shouldHideSoftInput(ev)) {
-                    it.hideSoftInput()
-                }
-            }
-        }
-        return super.dispatchTouchEvent(ev)
     }
 
     override fun onCompatCreateOptionsMenu(menu: Menu): Boolean {
