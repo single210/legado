@@ -683,15 +683,45 @@ class BookSourceEditActivity :
     override fun sendText(text: String) {
         val view = window.decorView.findFocus()
         if (view is EditText) {
-            val start = view.selectionStart
-            val end = view.selectionEnd
-            val edit = view.editableText//获取EditText的文字
-            if (start < 0 || start >= edit.length) {
-                edit.append(text)
-            } else if (start > end) {
-                edit.replace(end, start, text)
-            } else {
-                edit.replace(start, end, text)//光标所在位置插入文字
+            var start = view.selectionStart
+            var end = view.selectionEnd
+            if (start > end) {
+                val temp = start
+                start = end
+                end = temp
+            }
+            if (text.isNotEmpty()) {
+                val edit = view.editableText//获取EditText的文字
+                if (start < 0 || start >= edit.length) {
+                    edit.append(text)
+                } else {
+                    edit.replace(start, end, text)//光标所在位置插入文字
+                }
+            }
+            if (adapter.editEntityMaxLine >= 999) {
+                view.post {
+                    val editTextLocation = IntArray(2)
+                    view.getLocationOnScreen(editTextLocation)
+                    val recyclerViewLocation = IntArray(2)
+                    binding.recyclerView.getLocationOnScreen(recyclerViewLocation)
+                    val layout = view.layout
+                    if (layout != null) {
+                        val line = layout.getLineForOffset(end)
+                        val cursorYInEditText = layout.getLineTop(line)
+                        // 光标相对于屏幕的位置
+                        val cursorYOnScreen = editTextLocation[1] + cursorYInEditText
+                        // 光标相对于RecyclerView的位置
+                        val cursorYInRecyclerView = cursorYOnScreen - recyclerViewLocation[1]
+                        val recyclerViewBottom = binding.recyclerView.height - 120 //考虑键盘的经验值
+                        // 如果光标不在可见范围内，则滚动到光标位置
+                        if (cursorYInRecyclerView < 0 || cursorYInRecyclerView > recyclerViewBottom) {
+                            val scrollDistance = cursorYInRecyclerView - recyclerViewBottom / 3
+                            if (scrollDistance > 0 && binding.recyclerView.canScrollVertically(1) || scrollDistance < 0 && binding.recyclerView.canScrollVertically(-1)) {
+                                binding.recyclerView.smoothScrollBy(0, scrollDistance)
+                            }
+                        }
+                    }
+                }
             }
         }
     }
