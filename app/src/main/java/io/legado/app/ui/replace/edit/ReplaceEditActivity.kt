@@ -9,8 +9,6 @@ import android.view.MenuItem
 import android.widget.EditText
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
-import androidx.annotation.RequiresApi
-import androidx.core.view.ViewCompat
 import androidx.lifecycle.lifecycleScope
 import io.legado.app.R
 import io.legado.app.base.VMBaseActivity
@@ -185,6 +183,8 @@ class ReplaceEditActivity :
             val edit = view.editableText
             if (start < 0 || start >= edit.length) {
                 edit.append(text)
+            } else if (start > end) {
+                edit.replace(end, start, text)
             } else {
                 //光标所在位置插入文字
                 edit.replace(start, end, text)
