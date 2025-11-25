@@ -126,7 +126,7 @@ class SourceLoginDialog : BaseDialogFragment(R.layout.dialog_login, true) {
         rowUis?.forEachIndexed { index, rowUi ->
             val type = rowUi.type
             val name = rowUi.name
-            if (type == null || name.isNullOrEmpty()) { //不能省略，json反序列化也有出现null的可能
+            if (type == null || name == null) { //不能省略，json反序列化也有出现null的可能
                 AppLog.put(source.getTag() + " loginUi json err", null, true)
                 return@forEachIndexed
             }
@@ -143,18 +143,18 @@ class SourceLoginDialog : BaseDialogFragment(R.layout.dialog_login, true) {
                     it.editText.setText(loginInfo[name])
                 }
 
-                RowUi.Type.password -> ItemSourceEditBinding.inflate(
-                    layoutInflater,
-                    binding.root,
-                    false
-                ).let {
-                    binding.flexbox.addView(it.root)
-                    it.root.id = index + 1000
-                    it.textInputLayout.hint = name
-                    it.editText.inputType =
-                        InputType.TYPE_TEXT_VARIATION_PASSWORD or InputType.TYPE_CLASS_TEXT
-                    it.editText.setText(loginInfo[name])
-                }
+                    RowUi.Type.password -> ItemSourceEditBinding.inflate(
+                        layoutInflater,
+                        binding.root,
+                        false
+                    ).let {
+                        binding.flexbox.addView(it.root)
+                        it.root.id = index + 1000
+                        it.textInputLayout.hint = rowUi.name
+                        it.editText.inputType =
+                            InputType.TYPE_TEXT_VARIATION_PASSWORD or InputType.TYPE_CLASS_TEXT
+                        it.editText.setText(loginInfo?.get(rowUi.name))
+                    }
 
                 RowUi.Type.button -> ItemFilletTextBinding.inflate(
                     layoutInflater,
