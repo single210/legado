@@ -310,12 +310,14 @@ object AudioPlay : CoroutineScope by MainScope() {
     fun skipTo(index: Int) {
         Coroutine.async {
             stopPlay()
-            durChapterIndex = index
-            durChapterPos = 0
-            durPlayUrl = ""
-            durLyric = null
-            saveRead()
-            loadPlayUrl()
+            if (index in 0..<simulatedChapterSize) {
+                durChapterIndex = index
+                durChapterPos = 0
+                durPlayUrl = ""
+                durLyric = null
+                saveRead()
+                loadPlayUrl()
+            }
         }
     }
 
