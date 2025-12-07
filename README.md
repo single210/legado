@@ -1,4 +1,5 @@
-# [English](English.md) [中文](README.md) （本仓库fork自https://github.com/Luoyacheng/legado）
+# [English](English.md) [中文](README.md) 
+本仓库fork自https://github.com/Luoyacheng/legado
 
 ![icon_android](https://gitee.com/lyc486/yuedu/raw/master/icon_android.png)
 <a href="https://jb.gg/OpenSourceSupport" target="_blank">
