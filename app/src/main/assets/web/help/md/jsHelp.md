@@ -380,35 +380,35 @@ java.HMacBase64(data: String, algorithm: String, key: String): String
 ## book对象的可用属性
 ### 属性
 > 使用方法: 在js中或{{}}中使用book.属性的方式即可获取.如在正文内容后加上 ##{{book.name+"正文卷"+title}} 可以净化 书名+正文卷+章节名称（如 我是大明星正文卷第二章我爸是豪门总裁） 这一类的字符.
-```js
-bookUrl // 详情页Url(本地书源存储完整文件路径)
-tocUrl // 目录页Url (toc=table of Contents)
-origin // 书源URL(默认BookType.local)
-originName //书源名称 or 本地书籍文件名
-name // 书籍名称(书源获取)
-author // 作者名称(书源获取)
-kind // 分类信息(书源获取)
-customTag // 分类信息(用户修改)
-coverUrl // 封面Url(书源获取)
-customCoverUrl // 封面Url(用户修改)
-intro // 简介内容(书源获取)
-customIntro // 简介内容(用户修改)
-charset // 自定义字符集名称(仅适用于本地书籍)
-type // 0:text 1:audio
-group // 自定义分组索引号
-latestChapterTitle // 最新章节标题
-latestChapterTime // 最新章节标题更新时间
-lastCheckTime // 最近一次更新书籍信息的时间
-lastCheckCount // 最近一次发现新章节的数量
-totalChapterNum // 书籍目录总数
-durChapterTitle // 当前章节名称
-durChapterIndex // 当前章节索引
-durChapterPos // 当前阅读的进度(首行字符的索引位置)
-durChapterTime // 最近一次阅读书籍的时间(打开正文的时间)
-canUpdate // 刷新书架时更新书籍信息
-order // 手动排序
-originOrder //书源排序
-variable // 自定义书籍变量信息(用于书源规则检索书籍信息)
+ ```js
+ bookUrl // 详情页Url(本地书源存储完整文件路径)
+ tocUrl // 目录页Url (toc=table of Contents)
+ origin // 书源URL(默认BookType.local)
+ originName //书源名称 or 本地书籍文件名
+ name // 书籍名称(书源获取)
+ author // 作者名称(书源获取)
+ kind // 分类信息(书源获取)
+ customTag // 分类信息(用户修改)
+ coverUrl // 封面Url(书源获取)
+ customCoverUrl // 封面Url(用户修改)
+ intro // 简介内容(书源获取)
+ customIntro // 简介内容(用户修改)
+ charset // 自定义字符集名称(仅适用于本地书籍)
+ type // 0:text 1:audio
+ group // 自定义分组索引号
+ latestChapterTitle // 最新章节标题
+ latestChapterTime // 最新章节标题更新时间
+ lastCheckTime // 最近一次更新书籍信息的时间
+ lastCheckCount // 最近一次发现新章节的数量
+ totalChapterNum // 书籍目录总数
+ durChapterTitle // 当前章节名称
+ durChapterIndex // 当前章节索引
+ durChapterPos // 当前阅读的进度(首行字符的索引位置)
+ durChapterTime // 最近一次阅读书籍的时间(打开正文的时间)
+ canUpdate // 刷新书架时更新书籍信息
+ order // 手动排序
+ originOrder //书源排序
+ variable // 自定义书籍变量信息(用于书源规则检索书籍信息)
  ```
 ## book对象的部分可用函数
  * 自定义书籍变量存取
@@ -439,9 +439,9 @@ chapter.getVariable(key: String): String?
 ```
  * 章节信息存储
 ```js
- chapter.putLyric(value: String?) // 存储音频章节歌词
- chapter.putImgUrl(value: String?) // 存储章节图标链接，比如标题上的段评图标链接
- ```
+chapter.putLyric(value: String?) // 存储音频章节歌词
+chapter.putImgUrl(value: String?) // 存储章节图标链接，比如标题上的段评图标链接
+```
  
 ## source对象的部分可用函数
 * 获取书源url
